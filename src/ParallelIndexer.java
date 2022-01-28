@@ -6,13 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 public class ParallelIndexer {
-    private Indexer[] indexArray;
     private final HashMap<String, HashSet<Integer>> resultDict;
     private final long resultTime;
 
     public ParallelIndexer(int NumOfThreads, String path, List<File> fileList) {
         List<HashMap<String, HashSet<Integer>>> dictList;
-        indexArray = new Indexer[NumOfThreads];
+        Indexer[] indexArray = new Indexer[NumOfThreads];
         long start = System.currentTimeMillis();
 
         for(int i = 0; i < NumOfThreads; i++) {
