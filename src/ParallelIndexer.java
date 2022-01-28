@@ -6,30 +6,31 @@ import java.util.List;
 import java.util.Map;
 
 public class ParallelIndexer {
+    private Indexer[] IndexArray;
     private final HashMap<String, HashSet<Integer>> resultDict;
     private final long resultTime;
 
     public ParallelIndexer(int NumOfThreads, String path, List<File> fileList) {
         List<HashMap<String, HashSet<Integer>>> dictList;
-        Indexer[] indexArray = new Indexer[NumOfThreads];
+        IndexArray = new Indexer[NumOfThreads];
         long start = System.currentTimeMillis();
 
         for(int i = 0; i < NumOfThreads; i++) {
-            indexArray[i] = new Indexer(path, fileList, (fileList.size() / NumOfThreads) * i,
-                    i == (indexArray.length - 1) ? fileList.size() : fileList.size() / NumOfThreads * (i + 1) );
-            indexArray[i].start();
+            IndexArray[i] = new Indexer(path, fileList, (fileList.size() / NumOfThreads) * i,
+                    i == (IndexArray.length - 1) ? fileList.size() : fileList.size() / NumOfThreads * (i + 1) );
+            IndexArray[i].start();
         }
 
         try {
             for (int i = 0; i < NumOfThreads; i++) {
-                indexArray[i].join();
+                IndexArray[i].join();
             }
         } catch (InterruptedException e) {e.getMessage();}
 
         dictList = new ArrayList<>();
 
         for(int i = 0; i < NumOfThreads; i++) {
-            dictList.add(indexArray[i].getMap());
+            dictList.add(IndexArray[i].getMap());
         }
 
         resultDict = dictList.get(0);

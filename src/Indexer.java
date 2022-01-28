@@ -35,9 +35,9 @@ public class Indexer extends Thread {
     }
 
     public static int setFileID(File dir, int pathLen) {
-        String Path = dir.getAbsolutePath().substring(pathLen);
-        String[] folers = Path.split("\\\\");
-        folers[folers.length-1] = folers[folers.length-1].split("_")[0];
+        String path = dir.getAbsolutePath().substring(pathLen);
+        String[] folders = path.split("\\\\");
+        folders[folders.length-1] = folders[folders.length-1].split("_")[0];
 
         HashMap<String, Integer> dict = new HashMap<>();
         dict.put("test", 1);
@@ -46,7 +46,7 @@ public class Indexer extends Thread {
         dict.put("pos", 2);
         dict.put("unsup", 3);
 
-        return Integer.parseInt(dict.get(folers[0]) + String.valueOf(dict.get(folers[1])) + folers[2]);
+        return Integer.parseInt(String.valueOf(dict.get(folders[1])) + String.valueOf(dict.get(folders[2])) + String.valueOf(folders[3]));
     }
 
     public HashMap<String, HashSet<Integer>> getMap() {

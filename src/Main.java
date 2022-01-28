@@ -9,13 +9,15 @@ import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.*;
 
 
 public class Main {
     public static void main(String[] args) throws IOException {
+        int NumberOfThreads;
+        System.out.println("Enter num of Threads: ");
+        Scanner in = new Scanner(System.in);
+        NumberOfThreads = in.nextInt();
 
         String path = "C:\\Users\\olena\\course_work_parallel_computing\\datasets\\aclImdb";
         List<File> files = new ArrayList<>();
@@ -34,5 +36,31 @@ public class Main {
                         }
                     }
                 });
+
+        ParallelIndexer indexer = new ParallelIndexer(NumberOfThreads, path, files);
+
+        System.out.println("Num of lexemes -> " + indexer.getDict().size());
+        System.out.println("Time -> " + indexer.getResultTime() + " for num of threads -> " + NumberOfThreads);
+
+        long start = System.currentTimeMillis();
+        HashMap<String, HashSet<Integer>> map = new HashMap<>();
+        for(File file: files) {
+            String[] lexemes = Indexer.parse(file).split(" ");
+            int FileID = Indexer.setFileID(file, path.length());
+            for(String word: lexemes) {
+                if(!map.containsKey(word)) {
+                    map.put(word, new HashSet<>());
+                }
+                map.get(word).add(FileID);
+            }
+        }
+        long end = System.currentTimeMillis();
+
+        System.out.println();
+        System.out.println("Sequence time -> " + (end - start));
+        System.out.println("Num of lexemes -> " + map.size());
+
+        System.out.println();
+        System.out.println("seq and par is the same? " + map.equals(indexer.getDict()));
     }
 }
