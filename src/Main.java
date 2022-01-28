@@ -40,7 +40,8 @@ public class Main {
         ParallelIndexer indexer = new ParallelIndexer(NumberOfThreads, path, files);
 
         System.out.println("Num of lexemes -> " + indexer.getDict().size());
-        System.out.println("Time -> " + indexer.getResultTime() + " for num of threads -> " + NumberOfThreads);
+        System.out.println("Time -> " + indexer.getResultTime());
+        System.out.println("Number of threads -> " + NumberOfThreads);
 
         long start = System.currentTimeMillis();
         HashMap<String, HashSet<Integer>> map = new HashMap<>();
@@ -57,10 +58,10 @@ public class Main {
         long end = System.currentTimeMillis();
 
         System.out.println();
-        System.out.println("Sequence time -> " + (end - start));
         System.out.println("Num of lexemes -> " + map.size());
+        System.out.println("Sequence time -> " + (end - start));
 
         System.out.println();
-        System.out.println("seq and par is the same? " + map.equals(indexer.getDict()));
+        System.out.println("Same amount of lexemes? " + map.equals(indexer.getDict()));
     }
 }
