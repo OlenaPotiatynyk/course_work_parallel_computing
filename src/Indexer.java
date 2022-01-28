@@ -46,7 +46,7 @@ public class Indexer extends Thread {
         dict.put("pos", 2);
         dict.put("unsup", 3);
 
-        return Integer.parseInt(String.valueOf(dict.get(folders[1])) + String.valueOf(dict.get(folders[2])) + String.valueOf(folders[3]));
+        return Integer.parseInt(dict.get(folders[1]) + String.valueOf(dict.get(folders[2])) + folders[3]);
     }
 
     public HashMap<String, HashSet<Integer>> getMap() {

@@ -14,10 +14,10 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        int NumberOfThreads;
+        int numberOfThreads;
         System.out.println("Enter num of Threads: ");
         Scanner in = new Scanner(System.in);
-        NumberOfThreads = in.nextInt();
+        numberOfThreads = in.nextInt();
 
         String path = "C:\\Users\\olena\\course_work_parallel_computing\\datasets\\aclImdb";
         List<File> files = new ArrayList<>();
@@ -37,11 +37,11 @@ public class Main {
                     }
                 });
 
-        ParallelIndexer indexer = new ParallelIndexer(NumberOfThreads, path, files);
+        ParallelIndexer indexer = new ParallelIndexer(numberOfThreads, path, files);
 
         System.out.println("Num of lexemes -> " + indexer.getDict().size());
         System.out.println("Time -> " + indexer.getResultTime());
-        System.out.println("Number of threads -> " + NumberOfThreads);
+        System.out.println("Number of threads -> " + numberOfThreads);
 
         long start = System.currentTimeMillis();
         HashMap<String, HashSet<Integer>> map = new HashMap<>();
