@@ -6,16 +6,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Indexer extends Thread {
     private final String rootPath;
     private final List<File> fileList;
-    private final HashMap<String, HashSet<Integer>> map;
+    private final ConcurrentHashMap<String, HashSet<Integer>> map;
 
-    public Indexer (String path, List<File> list, int startIndex, int endIndex) {
+    public Indexer(String path, List<File> list, int startIndex, int endIndex, ConcurrentHashMap<String, HashSet<Integer>> map) {
         rootPath = path;
         fileList = new ArrayList<>(list.subList(startIndex, endIndex));
-        map = new HashMap<>();
+        this.map = map;
     }
 
     public static String parse(File file) {
@@ -34,7 +35,7 @@ public class Indexer extends Thread {
         return line;
     }
 
-    public static int setFileID(File dir, int pathLen) {
+    public static int calculateFileID(File dir, int pathLen) {
         String path = dir.getAbsolutePath().substring(pathLen);
         String[] folders = path.split("\\\\");
         folders[folders.length-1] = folders[folders.length-1].split("_")[0];
@@ -49,20 +50,16 @@ public class Indexer extends Thread {
         return Integer.parseInt(dict.get(folders[1]) + String.valueOf(dict.get(folders[2])) + folders[3]);
     }
 
-    public HashMap<String, HashSet<Integer>> getMap() {
-        return map;
-    }
-
     @Override
     public void run() {
         for(File file: fileList) {
             String[] lexemes = Indexer.parse(file).split(" ");
-            int FileID = Indexer.setFileID(file, rootPath.length());
+            int fileID = Indexer.calculateFileID(file, rootPath.length());
             for(String word: lexemes) {
                 if(!map.containsKey(word)) {
                     map.put(word, new HashSet<>());
                 }
-                map.get(word).add(FileID);
+                map.get(word).add(fileID);
             }
         }
     }

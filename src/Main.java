@@ -37,17 +37,19 @@ public class Main {
                     }
                 });
 
+        //run in parallel
         ParallelIndexer indexer = new ParallelIndexer(numberOfThreads, path, files);
 
         System.out.println("Num of lexemes -> " + indexer.getDict().size());
         System.out.println("Time -> " + indexer.getResultTime());
         System.out.println("Number of threads -> " + numberOfThreads);
 
+        //run in sequence
         long start = System.currentTimeMillis();
         HashMap<String, HashSet<Integer>> map = new HashMap<>();
         for(File file: files) {
             String[] lexemes = Indexer.parse(file).split(" ");
-            int FileID = Indexer.setFileID(file, path.length());
+            int FileID = Indexer.calculateFileID(file, path.length());
             for(String word: lexemes) {
                 if(!map.containsKey(word)) {
                     map.put(word, new HashSet<>());
